@@ -2,6 +2,7 @@ package Model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -11,7 +12,8 @@ import java.util.List;
 public class Model {
 
     private List<WorkerRunnable> connections = new ArrayList<WorkerRunnable>(); //all connections.
-    public List<String> currentUserList; //string of users.
+    private List<String> currentUserList; //string of users.
+    private HashMap<String, String> duelList = new HashMap<>();
 
     /**
      * Reset the connections.
@@ -43,7 +45,6 @@ public class Model {
 
     /**
      * Gives back a list of all connected users.
-     *
      * @return List<String>
      */
     public List<String> getConnectedPersons() {
@@ -51,17 +52,7 @@ public class Model {
     }
 
     /**
-     * Set the person to the list
-     *
-     * @param name is a String.
-     */
-    public void setPerson(String name) {
-
-    }
-
-    /**
      * Send to all the users a message.
-     *
      * @param message String of text to send to the person.
      */
     public void sendToAnyone(String message) {
@@ -74,8 +65,18 @@ public class Model {
     }
 
     /**
+     * Send a message only to one person.
+     */
+    public void sendToOnePerson(String player, String message) {
+        for (WorkerRunnable connection : connections) {
+            if (connection.isConnected && connection.getNickname().equals(player)) {
+                connection.sendMessageToClient(message);
+            }
+        }
+    }
+
+    /**
      * Remove a WorkerRunnable from the list of currentConnections.
-     *
      * @param connection to be killed.
      */
     public synchronized void removeConnection(WorkerRunnable connection) {
@@ -84,7 +85,6 @@ public class Model {
 
     /**
      * Update the current list of Nicknames in the connection.
-     *
      * @return a list of people who are currently connected.
      */
     public synchronized List<String> updateListOfNicknames() {
@@ -102,10 +102,43 @@ public class Model {
 
     /**
      * Get the current connections.
-     *
      * @return List of all connections<WorkerRunnable> containing
      */
     public List<WorkerRunnable> getConnections() {
         return connections;
+    }
+
+
+    /**
+     * @return the duelList
+     */
+    public synchronized HashMap<String, String> getDuelList() {
+        return duelList;
+    }
+
+    /**
+     * Duel consist of a player who starts the duel and the player it wants to duel.
+     * @param playerFrom a String containing the player.
+     * @param game       the game like TicTacToe
+     * @param playerTo   the player String which is actually online
+     */
+    public synchronized void insertDuel(String playerFrom, String game, String playerTo) {
+        duelList.put(playerFrom + ":" + game, playerTo);
+    }
+
+    /**
+     * Check if a player is online based on name.
+     * @param playerName
+     * @return Boolean stating true or false.
+     */
+    public synchronized boolean checkOnline(String playerName) {
+        Boolean found = false;
+        for (WorkerRunnable player : getConnections()) {
+            if (player.getNickname().equals(playerName)) {
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 }

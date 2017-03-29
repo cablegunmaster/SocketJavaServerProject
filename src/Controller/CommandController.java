@@ -2,7 +2,11 @@ package Controller;
 
 import Model.WorkerRunnable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Created by jasper wil.lankhorst on 12-3-2017.
@@ -11,7 +15,7 @@ public class CommandController {
 
     Controller controller;
 
-    public CommandController(Controller controller){
+    public CommandController(Controller controller) {
         this.controller = controller;
     }
 
@@ -21,7 +25,7 @@ public class CommandController {
 
         String command = null;
         String player = null;
-        String chat = null;
+        String rest = null;
 
         if (pieces.length >= 1) {
             command = pieces[0];
@@ -34,7 +38,7 @@ public class CommandController {
         }
 
         if (pieces.length >= 3) {
-            chat = pieces[2];
+            rest = pieces[2];
         }
 
         switch (command) {
@@ -53,15 +57,82 @@ public class CommandController {
                     sendUserList();
                 }
                 break;
-            case "/list":
+            case "/players":
                 sendUserListToOneUser(runnable);
                 break;
+            case "/duels":
+                sendListOfDuels(runnable);
             case "/chat":
-                sendToAllMessage(player + " " + chat);
+                sendToAllMessage(player + " " + rest);
                 break;
+            case "/duel":
+                sendDuelRequest(runnable, player, rest);
+            case "/accept":
+                sendAcceptRequest(runnable, player, rest);
+            case "/cancel":
+                sendCancelRequest(runnable, player, rest);
+            case "/move":
+                sendMove(player, rest);
             default:
                 runnable.sendMessageToClient("Wrong command found.");
                 break;
+        }
+    }
+
+    public void sendCancelRequest(WorkerRunnable player, String playerFrom, String game) {
+        HashMap<String, String> duelList = controller.getModel().getDuelList();
+        if (duelList.containsKey(playerFrom + ":" + game)) {
+            duelList.remove(playerFrom + ":" + game);
+            player.sendMessageToClient("Duel:" + playerFrom + "game:" + game + " cancelled ");
+            controller.getModel().sendToOnePerson(playerFrom, player.getNickname() + " has cancelled your duel" + game);
+        } else {
+            player.sendMessageToClient("duel cancellation invalid");
+        }
+    }
+
+    public void sendMove(String player, String move) {
+        controller.getModel().sendToOnePerson(player, "/move " + move);
+    }
+
+    public void sendAcceptRequest(WorkerRunnable player, String playerFrom, String game) {
+        HashMap<String, String> duelList = controller.getModel().getDuelList();
+        if (duelList.containsKey(playerFrom + ":" + game)) {
+            duelList.remove(playerFrom + ":" + game);
+            player.sendMessageToClient("Duel:" + playerFrom + "game:" + game + " accepted ");
+            controller.getModel().sendToOnePerson(playerFrom, player.getNickname() + " has accepted your duel" + game);
+
+            //@TODO Send command to begin game.
+        } else {
+            player.sendMessageToClient("duel accepting is invalid format");
+        }
+    }
+
+    public void sendDuelRequest(WorkerRunnable runnable, String challengePlayer, String game) {
+
+        String nickname = runnable.getNickname();
+        if (controller.getModel().checkOnline(challengePlayer)) {
+            controller.getModel().sendToOnePerson(challengePlayer, "Duel request from" + nickname + " game:" + game + " accept with sending '/acceptDuel " + nickname + " " + game + "'"); //send Duel Request.
+            controller.getModel().insertDuel(nickname, game, challengePlayer);
+        }
+    }
+
+
+    /**
+     * Request the duelList.
+     * @param runnable the player requesting the list.
+     */
+    public void sendListOfDuels(WorkerRunnable runnable) {
+        //send a duel.
+        String nickname = runnable.getNickname();
+        runnable.sendMessageToClient("Duels:");
+
+        HashMap<String, String> duelList = controller.getModel().getDuelList();
+        Set<Entry<String, String>> set = duelList.entrySet();
+        List<Entry<String, String>> list = new ArrayList<Entry<String, String>>(set);
+
+        //Send list to player requesting it.
+        for (Entry<String, String> entry : list) {
+            runnable.sendMessageToClient("From:" + entry.getKey() + " Challenges:" + entry.getValue());
         }
     }
 
@@ -97,7 +168,7 @@ public class CommandController {
         return playerList;
     }
 
-    public void disconnectAllUsers(){
+    public void disconnectAllUsers() {
         sendToAllMessage("disconnected\n");
         controller.getModel().resetConnections();
         updateUserList();

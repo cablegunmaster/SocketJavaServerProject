@@ -26,7 +26,6 @@ public class Controller {
 
     /**
      * Controller class which grabs all.
-     *
      * @param m
      * @param v
      * @param portNumber
@@ -53,7 +52,6 @@ public class Controller {
 
     /**
      * Add a String to the log.
-     *
      * @param line String value put in the view.
      */
     public synchronized void addStringToLog(String line) {
@@ -73,7 +71,6 @@ public class Controller {
 
     /**
      * Starting the server, if no server has been started already.
-     *
      * @param portNumber Integer
      */
     public synchronized void startServer(Integer portNumber) {
@@ -126,7 +123,6 @@ public class Controller {
 
     /**
      * Stop the server.
-     *
      * @param multiThreadedServer
      */
     private void stopMultiThreadedServer(MultiThreadedServer multiThreadedServer) {
@@ -140,6 +136,7 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         view.refresh();
     }
@@ -163,7 +160,6 @@ public class Controller {
 
     /**
      * Add 'workerRunnable' connections to the list.
-     *
      * @param workerRunnable
      */
     public void addConnection(WorkerRunnable workerRunnable) {
@@ -181,4 +177,5 @@ public class Controller {
     public CommandController getCommandController() {
         return commandController;
     }
+
 }
