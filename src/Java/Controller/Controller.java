@@ -1,7 +1,7 @@
-package Controller;
+package Java.Controller;
 
-import Model.*;
-import View.*;
+import Java.Model.*;
+import Java.View.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +24,7 @@ public class Controller {
     private static Boolean restartProces = false;
 
     /**
-     * Controller class which grabs all.
+     * Java.Controller class which grabs all.
      * @param m
      * @param v
      * @param portNumber
@@ -161,7 +161,7 @@ public class Controller {
      * Add 'clientWorkerRunnable' connections to the list.
      * @param clientWorkerRunnable
      */
-    public void addConnection(Model.ClientWorkerRunnable clientWorkerRunnable) {
+    public void addConnection(ClientWorkerRunnable clientWorkerRunnable) {
         model.getConnections().add(clientWorkerRunnable);
     }
 

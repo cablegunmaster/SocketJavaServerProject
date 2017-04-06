@@ -1,6 +1,6 @@
-package Model;
+package Java.Model;
 
-import Controller.Controller;
+import Java.Controller.Controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -58,7 +58,7 @@ public class MultiThreadedServer implements Runnable {
         if (clientSocket != null) {
             //Connecting client.
             controller.addStringToLog("Connection made..");
-            Model.ClientWorkerRunnable clientWorkerRunnable = new Model.ClientWorkerRunnable(
+            ClientWorkerRunnable clientWorkerRunnable = new ClientWorkerRunnable(
                     clientSocket, "Multithreaded Server", controller);
             controller.addConnection(clientWorkerRunnable);
             Thread t = new Thread(clientWorkerRunnable);

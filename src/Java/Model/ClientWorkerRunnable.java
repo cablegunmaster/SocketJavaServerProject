@@ -1,7 +1,7 @@
-package Model;
+package Java.Model;
 
-import Controller.Controller;
-import Controller.CommandController;
+import Java.Controller.Controller;
+import Java.Controller.CommandController;
 
 import java.io.*;
 import java.net.Socket;
@@ -10,7 +10,7 @@ import java.net.SocketException;
 /**
  * Created by Jasper Lankhorst on 20-11-2016.
  */
-public class ClientWorkerRunnable implements Runnable, userInterface {
+public class ClientWorkerRunnable implements Runnable, UserInterface {
 
     protected Socket clientSocket = null;
     protected String serverText = null;

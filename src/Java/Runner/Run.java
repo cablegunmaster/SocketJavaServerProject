@@ -1,8 +1,8 @@
-package Runner;
+package Java.Runner;
 
-import Controller.*;
-import Model.*;
-import View.*;
+import Java.Controller.*;
+import Java.Model.*;
+import Java.View.*;
 
 /**
  * Created by Jasper Lankhorst on 17-11-2016.

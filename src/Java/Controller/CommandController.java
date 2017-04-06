@@ -1,6 +1,6 @@
-package Controller;
+package Java.Controller;
 
-import Model.ClientWorkerRunnable;
+import Java.Model.ClientWorkerRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,6 @@ CommandController {
     public void procesCommand(ClientWorkerRunnable runnable, String input) {
         //TODO split this better and make a format for command  <arg[0] command> <arg[1] player> <arg [2] ignore || chatmsg >
         String[] pieces = input.split(" ", 3);
-
         String command = null;
         String player = null;
         String rest = null;
@@ -48,6 +47,8 @@ CommandController {
         }
 
         switch (command) {
+
+            //Connect.
             case "/connect":
                 if (player != null) {
                     runnable.setNickname(player);
@@ -56,29 +57,38 @@ CommandController {
                     //sendToAllMessage("/connected "+ player); later?
                 }
                 break;
-            case "/nickname":
+            //Change nickname
+            case "/nick":
                 if (player != null) {
                     runnable.setNickname(player);
                     updateUserList();
                     sendUserList();
                 }
                 break;
+            //Show list of users.
             case "/players":
                 sendUserListToOneUser(runnable);
                 break;
-            case "/duels":
+            //Show list of duels
+            case "/showduels":
                 sendListOfDuels(runnable);
+                //Chat to everyone.
             case "/chat":
                 sendToAllMessage(player + " " + rest);
                 break;
-            case "/duel":
+            //Request duel.
+            case "/requestduel":
                 sendDuelRequest(runnable, player, rest);
-            case "/accept":
+                //Accept Duel
+            case "/acceptduel":
                 sendAcceptRequest(runnable, player, rest);
-            case "/cancel":
+                //Cancel Duel
+            case "/cancelduel":
                 sendCancelRequest(runnable, player, rest);
+                //Game make a move.
             case "/move":
                 sendMove(player, rest);
+                //something else send wrong command found.
             default:
                 runnable.sendMessageToClient("Wrong command found.");
                 break;

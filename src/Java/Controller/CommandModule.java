@@ -1,15 +1,16 @@
-package Controller;
+package Java.Controller;
 
 /**
  * Created by jasper wil.lankhorst on 12-3-2017.
  */
-public interface commandModule {
+public interface CommandModule {
 
     /**
      * Created by jasper wil.lankhorst on 20-12-2016.
      * ingame Moves.
      */
     void sendMove(int move); //send a move to server.
+
     void sendWin(); //send win to server. (server checks if Human won or not.)
 
     //Chat move
