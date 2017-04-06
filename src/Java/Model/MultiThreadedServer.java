@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Jasper Lankhorst on 19-11-2016.
@@ -60,10 +58,10 @@ public class MultiThreadedServer implements Runnable {
         if (clientSocket != null) {
             //Connecting client.
             controller.addStringToLog("Connection made..");
-            WorkerRunnable workerRunnable = new WorkerRunnable(
+            Model.ClientWorkerRunnable clientWorkerRunnable = new Model.ClientWorkerRunnable(
                     clientSocket, "Multithreaded Server", controller);
-            controller.addConnection(workerRunnable);
-            Thread t = new Thread(workerRunnable);
+            controller.addConnection(clientWorkerRunnable);
+            Thread t = new Thread(clientWorkerRunnable);
             t.start();
         }
     }

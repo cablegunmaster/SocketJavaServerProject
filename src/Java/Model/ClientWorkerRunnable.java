@@ -10,7 +10,7 @@ import java.net.SocketException;
 /**
  * Created by Jasper Lankhorst on 20-11-2016.
  */
-public class WorkerRunnable implements Runnable, userInterface {
+public class ClientWorkerRunnable implements Runnable, userInterface {
 
     protected Socket clientSocket = null;
     protected String serverText = null;
@@ -24,7 +24,7 @@ public class WorkerRunnable implements Runnable, userInterface {
     public int matchStatus;
     public CommandController commandController;
 
-    public WorkerRunnable(Socket clientSocket, String serverText, Controller controller) {
+    public ClientWorkerRunnable(Socket clientSocket, String serverText, Controller controller) {
         this.clientSocket = clientSocket;
         this.serverText = serverText;
         this.controller = controller;

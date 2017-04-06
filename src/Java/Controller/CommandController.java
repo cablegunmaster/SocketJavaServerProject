@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.WorkerRunnable;
+import Model.ClientWorkerRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,8 @@ import java.util.Set;
 /**
  * Created by jasper wil.lankhorst on 12-3-2017.
  */
-public class CommandController {
+public class
+CommandController {
 
     Controller controller;
 
@@ -19,7 +20,12 @@ public class CommandController {
         this.controller = controller;
     }
 
-    public void procesCommand(WorkerRunnable runnable, String input) {
+    /**
+     * Command to be processed by the server.
+     * @param runnable Runnable client.
+     * @param input    String of input from a client.
+     */
+    public void procesCommand(ClientWorkerRunnable runnable, String input) {
         //TODO split this better and make a format for command  <arg[0] command> <arg[1] player> <arg [2] ignore || chatmsg >
         String[] pieces = input.split(" ", 3);
 
@@ -79,7 +85,7 @@ public class CommandController {
         }
     }
 
-    public void sendCancelRequest(WorkerRunnable player, String playerFrom, String game) {
+    public void sendCancelRequest(ClientWorkerRunnable player, String playerFrom, String game) {
         HashMap<String, String> duelList = controller.getModel().getDuelList();
         if (duelList.containsKey(playerFrom + ":" + game)) {
             duelList.remove(playerFrom + ":" + game);
@@ -94,7 +100,7 @@ public class CommandController {
         controller.getModel().sendToOnePerson(player, "/move " + move);
     }
 
-    public void sendAcceptRequest(WorkerRunnable player, String playerFrom, String game) {
+    public void sendAcceptRequest(ClientWorkerRunnable player, String playerFrom, String game) {
         HashMap<String, String> duelList = controller.getModel().getDuelList();
         if (duelList.containsKey(playerFrom + ":" + game)) {
             duelList.remove(playerFrom + ":" + game);
@@ -107,7 +113,7 @@ public class CommandController {
         }
     }
 
-    public void sendDuelRequest(WorkerRunnable runnable, String challengePlayer, String game) {
+    public void sendDuelRequest(ClientWorkerRunnable runnable, String challengePlayer, String game) {
 
         String nickname = runnable.getNickname();
         if (controller.getModel().checkOnline(challengePlayer)) {
@@ -121,7 +127,7 @@ public class CommandController {
      * Request the duelList.
      * @param runnable the player requesting the list.
      */
-    public void sendListOfDuels(WorkerRunnable runnable) {
+    public void sendListOfDuels(ClientWorkerRunnable runnable) {
         //send a duel.
         String nickname = runnable.getNickname();
         runnable.sendMessageToClient("Duels:");
@@ -145,7 +151,7 @@ public class CommandController {
         controller.getView().refresh();
     }
 
-    public void sendUserListToOneUser(WorkerRunnable runnable) {
+    public void sendUserListToOneUser(ClientWorkerRunnable runnable) {
         runnable.sendMessageToClient("/userlist " + getAllUserNicknames());
     }
 
@@ -160,9 +166,9 @@ public class CommandController {
 
 
     public String getAllUserNicknames() {
-        List<WorkerRunnable> connections = controller.getModel().getConnections();
+        List<ClientWorkerRunnable> connections = controller.getModel().getConnections();
         String playerList = "";
-        for (WorkerRunnable runnable : connections) {
+        for (ClientWorkerRunnable runnable : connections) {
             playerList += runnable.getNickname() + " ";
         }
         return playerList;

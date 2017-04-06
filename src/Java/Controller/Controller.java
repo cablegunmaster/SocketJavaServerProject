@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.util.List;
 
 /**
  * Created by Jasper Lankhorst on 17-11-2016.
@@ -159,11 +158,11 @@ public class Controller {
     }
 
     /**
-     * Add 'workerRunnable' connections to the list.
-     * @param workerRunnable
+     * Add 'clientWorkerRunnable' connections to the list.
+     * @param clientWorkerRunnable
      */
-    public void addConnection(WorkerRunnable workerRunnable) {
-        model.getConnections().add(workerRunnable);
+    public void addConnection(Model.ClientWorkerRunnable clientWorkerRunnable) {
+        model.getConnections().add(clientWorkerRunnable);
     }
 
     public Model getModel() {

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Model {
 
-    private List<WorkerRunnable> connections = new ArrayList<WorkerRunnable>(); //all connections.
+    private List<Model.ClientWorkerRunnable> connections = new ArrayList<Model.ClientWorkerRunnable>(); //all connections.
     private List<String> currentUserList; //string of users.
     private HashMap<String, String> duelList = new HashMap<>();
 
@@ -20,7 +20,7 @@ public class Model {
      */
     public void resetConnections() {
         if (connections.size() > 0) {
-            for (WorkerRunnable connection : connections) {
+            for (Model.ClientWorkerRunnable connection : connections) {
                 if (connection.clientSocket.isConnected()) {
 
                     // connection.sendMessageToClient("disconnected");
@@ -36,7 +36,7 @@ public class Model {
                 }
             }
 
-            connections = new ArrayList<WorkerRunnable>();
+            connections = new ArrayList<Model.ClientWorkerRunnable>();
         }
     }
 
@@ -56,7 +56,7 @@ public class Model {
      * @param message String of text to send to the person.
      */
     public void sendToAnyone(String message) {
-        for (WorkerRunnable connection : connections) {
+        for (Model.ClientWorkerRunnable connection : connections) {
 
             if (connection.isConnected) {
                 connection.sendMessageToClient(message);
@@ -68,7 +68,7 @@ public class Model {
      * Send a message only to one person.
      */
     public void sendToOnePerson(String player, String message) {
-        for (WorkerRunnable connection : connections) {
+        for (Model.ClientWorkerRunnable connection : connections) {
             if (connection.isConnected && connection.getNickname().equals(player)) {
                 connection.sendMessageToClient(message);
             }
@@ -76,10 +76,10 @@ public class Model {
     }
 
     /**
-     * Remove a WorkerRunnable from the list of currentConnections.
+     * Remove a ClientWorkerRunnable from the list of currentConnections.
      * @param connection to be killed.
      */
-    public synchronized void removeConnection(WorkerRunnable connection) {
+    public synchronized void removeConnection(Model.ClientWorkerRunnable connection) {
         connections.remove(connection);
     }
 
@@ -89,7 +89,7 @@ public class Model {
      */
     public synchronized List<String> updateListOfNicknames() {
         List<String> users = new ArrayList<>();
-        for (WorkerRunnable connection : connections) {
+        for (Model.ClientWorkerRunnable connection : connections) {
             try {
                 String nickname = connection.getNickname();
                 users.add(nickname);
@@ -102,9 +102,9 @@ public class Model {
 
     /**
      * Get the current connections.
-     * @return List of all connections<WorkerRunnable> containing
+     * @return List of all connections<ClientWorkerRunnable> containing
      */
-    public List<WorkerRunnable> getConnections() {
+    public List<Model.ClientWorkerRunnable> getConnections() {
         return connections;
     }
 
@@ -133,7 +133,7 @@ public class Model {
      */
     public synchronized boolean checkOnline(String playerName) {
         Boolean found = false;
-        for (WorkerRunnable player : getConnections()) {
+        for (Model.ClientWorkerRunnable player : getConnections()) {
             if (player.getNickname().equals(playerName)) {
                 found = true;
                 break;
